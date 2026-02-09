@@ -1,0 +1,32 @@
+Material_Type,Tensile_Strength_MPa,Weight_Capacity_kg,Biodegradability_Score,CO2_Emission_Score,Recyclability_Percent,Cost_per_unit,cost_per_sq_in,co2_per_sq_in,Suitability_Tags
+Aluminum Foil,35.6,3.6,0,9.89,95.4,13.7472,0.013747,0.00989,"Food & Beverages, Pharmaceuticals"
+Bagasse (Sugarcane),22.4,0.7,96.5,1.2,63.2,7.2436,0.007244,0.0012,"Food & Beverages, Home & Living"
+Bamboo Fiber,45.1,2.5,98.2,0.77,32.3,14.5694,0.014569,0.00077,"Apparel & Fashion, Home & Living"
+Bioplastic (PLA),67.7,5.3,92.7,1.53,55.9,22.2942,0.022294,0.00153,"Food & Beverages, Personal Care"
+Edible Seaweed Film,10.7,7.1,100,0.53,2.5,5.641,0.005641,0.00053,Food & Beverages
+Mushroom Mycelium,11.5,8.5,100,0.29,100,6.05,0.00605,0.00029,"Electronics, Cosmetics & Beauty, E-commerce & Logistics Goods"
+Recycled Paperboard,25,4.2,95,0.85,98,4.2,0.0042,0.00085,E-commerce & Logistics Goods
+Corrugated Cardboard,32.5,8,85,1.1,88,6.2,0.0062,0.0011,E-commerce & Logistics Goods
+Kraft Paper,28,6.5,90,0.95,92,4.8,0.0048,0.00095,"Apparel & Fashion, E-commerce & Logistics Goods, Food & Beverages"
+Glass,40,25,0,8.5,100,15.6,0.0156,0.0085,"Food & Beverages, Pharmaceuticals, Cosmetics & Beauty"
+Tinplate Steel,250,30,5,7.9,98,18.4,0.0184,0.0079,"Food & Beverages, Industrial Goods"
+Aluminum Can Sheet,310,28,0,9.2,100,21.3,0.0213,0.0092,Food & Beverages
+PET Plastic,55,12,8,3.2,85,9.4,0.0094,0.0032,"Food & Beverages, Personal Care"
+HDPE Plastic,37,15,0,1.9,95,10.2,0.0102,0.0019,"Personal Care, Cosmetics & Beauty, Industrial Goods"
+Jute Fiber,65,10,100,0.4,20,8.5,0.0085,0.0004,"Apparel & Fashion, Agriculture & Raw Materials"
+Double-Wall Corrugated Cardboard,45,25,85,1.5,90,8.5,0.0085,0.0015,"E-commerce & Logistics Goods, Industrial Goods"
+Triple-Wall Corrugated Cardboard,60,60,85,2.1,90,12,0.012,0.0021,"Industrial Goods, Automotive parts & Accessories"
+Industrial Recycled Steel,400,250,0,6.5,98,35,0.035,0.0065,E-commerce & Logistics Goods
+Reinforced Mushroom Mycelium,25,20,100,0.45,100,10.5,0.0105,0.00045,"Electronics, Cosmetics & Beauty, E-commerce & Logistics Goods"
+Structural Bamboo Timber,120,150,95,1.2,40,45,0.045,0.0012,E-commerce & Logistics Goods
+Heavy-Duty HDPE (Industrial),32,45,0,1.9,95,14.5,0.0145,0.0019,E-commerce & Logistics Goods
+Recycled Wood Crate,40,500,90,0.8,80,55,0.055,0.0008,E-commerce & Logistics Goods
+Bio-Composite (Flax Fiber),150,35,70,1.1,30,28,0.028,0.0011,E-commerce & Logistics Goods
+Industrial Kraft Linerboard,35,15,95,0.9,95,5.8,0.0058,0.0009,E-commerce & Logistics Goods
+Bubble Wrap (LDPE),12,5,0,6.8,92,11.2,0.0112,0.0068,"Electronics, E-commerce & Logistics Goods, Toys"
+EPS Foam (Styrofoam),0.4,25,0,8.5,10,9,0.009,0.0085,"Electronics, Home & Living, Industrial Goods"
+Polypropylene (PP) Sheet,32,15,0,5.2,95,13.5,0.0135,0.0052,"Personal Care, Cosmetics & Beauty, Toys"
+Stretch Wrap (LLDPE),22,30,0,4.5,88,6.8,0.0068,0.0045,"E-commerce & Logistics Goods, Industrial Goods"
+Burlap / Hessian,48,40,100,0.4,30,14.2,0.0142,0.0004,"Agriculture & Raw Materials, Home & Living"
+Biodegradable Air Pillows,18,2,90,1.4,0,18.5,0.0185,0.0014,"Electronics, E-commerce & Logistics Goods"
+Wooden Pallet (Pine),40,1000,100,2.5,100,25,0.025,0.0025,"Industrial Goods, Agriculture & Raw Materials, Automotive parts & Accessories"

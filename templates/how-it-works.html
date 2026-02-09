@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works | EcoPackAI</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom styles for the geometric grid background */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            background-image:
+                linear-gradient(to right, #EDF2F7 1px, transparent 1px),
+                linear-gradient(to bottom, #EDF2F7 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Custom gradient for emphasized text */
+        .gradient-text {
+            background: linear-gradient(135deg, #1A365D 0%, #4FD1C5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Teal button with drop shadow */
+        .teal-btn {
+            background-color: #4FD1C5;
+            box-shadow: 0 4px 12px rgba(79, 209, 197, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .teal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(79, 209, 197, 0.4);
+        }
+
+        /* 3D Flowchart Container */
+        .flowchart-container {
+            position: relative;
+            padding: 4rem 0;
+            perspective: 1000px;
+        }
+
+        /* Flow Process Cards */
+        .flow-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .flow-card:hover {
+            transform: translateY(-10px) rotateX(2deg);
+            box-shadow: 0 20px 40px rgba(26, 54, 93, 0.2);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3rem;
+            height: 3rem;
+            background: #4FD1C5;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 10px rgba(79, 209, 197, 0.4);
+            z-index: 20;
+        }
+
+        /* 3D Moving Arrows */
+        .arrow-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 4rem;
+            perspective: 500px;
+        }
+
+        .arrow-3d {
+            width: 4rem;
+            height: 1rem;
+            background: #e2e8f0;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: float 2s infinite ease-in-out;
+        }
+
+        .arrow-3d::after {
+            content: '';
+            position: absolute;
+            right: -1rem;
+            top: -1rem;
+            border-left: 1.5rem solid #e2e8f0;
+            border-top: 1.5rem solid transparent;
+            border-bottom: 1.5rem solid transparent;
+        }
+
+        .arrow-moving-part {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, #4FD1C5, transparent);
+            opacity: 0.5;
+            animation: flowRight 1.5s infinite linear;
+        }
+
+        .vertical-arrow-container {
+            display: flex;
+            justify-content: center;
+            height: 4rem;
+            align-items: center;
+        }
+
+        .arrow-down-3d {
+            width: 1rem;
+            height: 4rem;
+            background: #e2e8f0;
+            position: relative;
+        }
+
+        .arrow-down-3d::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            left: -1rem;
+            border-top: 1.5rem solid #e2e8f0;
+            border-left: 1.5rem solid transparent;
+            border-right: 1.5rem solid transparent;
+        }
+
+        .arrow-down-moving-part {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, #4FD1C5, transparent);
+            opacity: 0.5;
+            animation: flowDown 1.5s infinite linear;
+        }
+
+
+        @keyframes flowRight {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes flowDown {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Mobile vs Desktop Layout for Arrows */
+        @media (min-width: 768px) {
+            .mobile-arrow {
+                display: none;
+            }
+
+            .desktop-arrow {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .mobile-arrow {
+                display: flex;
+            }
+
+            .desktop-arrow {
+                display: none;
+            }
+        }
+    </style>
+
+    <!-- Tailwind configuration for custom colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-blue': '#1A365D',
+                        'accent-teal': '#4FD1C5',
+                        'grid-bg': '#EDF2F7'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="font-inter text-gray-800">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100 shadow-sm">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <div
+                        class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-blue to-accent-teal flex items-center justify-center">
+                        <i class="fas fa-leaf text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-primary-blue">EcoPackAI</h1>
+                        <p class="text-xs text-gray-500 hidden md:block">Intelligent Packaging Optimization</p>
+                    </div>
+                </div>
+
+                <!-- Centered Navigation Links -->
+                <div class="hidden md:flex space-x-10">
+                    <a href="/" class="text-gray-700 hover:text-accent-teal font-medium transition-colors">Home</a>
+                    <a href="/categories"
+                        class="text-gray-700 hover:text-accent-teal font-medium transition-colors">Categories</a>
+                    <a href="/dashboard" class="text-gray-700 hover:text-accent-teal font-medium transition-colors">
+                        <i class="fas fa-chart-line mr-1"></i>Dashboard
+                    </a>
+                    <a href="/how-it-works"
+                        class="text-accent-teal font-semibold border-b-2 border-accent-teal transition-colors">How It
+                        Works</a>
+                    <a href="/about"
+                        class="text-gray-700 hover:text-accent-teal font-medium transition-colors">About</a>
+                </div>
+
+                <!-- CTA Button -->
+                <a href="/#analysis" class="teal-btn text-white font-semibold py-3 px-6 rounded-lg inline-block">
+                    Get Started <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="py-16 text-center bg-gradient-to-b from-blue-50 to-white">
+        <div class="container mx-auto px-6">
+            <h1 class="text-4xl md:text-5xl font-bold text-primary-blue mb-4">How <span
+                    class="gradient-text">EcoPackAI</span> Works</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Discover the intelligent process behind sustainable
+                packaging recommendations.</p>
+        </div>
+    </section>
+
+    <!-- Professional Flowchart Section (3D Animated) -->
+    <section class="flowchart-container bg-white relative overflow-hidden py-20">
+        <!-- Background decorative elements -->
+        <div class="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
+            <div class="absolute top-10 left-10 w-64 h-64 bg-accent-teal rounded-full blur-3xl animate-pulse"></div>
+            <div
+                class="absolute bottom-10 right-10 w-64 h-64 bg-primary-blue rounded-full blur-3xl animate-pulse delay-700">
+            </div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10" style="perspective: 1000px;">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-primary-blue mb-4">The Intelligent Process</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-accent-teal to-blue-600 mx-auto rounded-full"></div>
+            </div>
+
+            <!-- Desktop Layout: 3D Horizontal Timeline -->
+            <div class="hidden lg:flex justify-between items-start relative px-4">
+                <!-- 3D Connecting Pipe -->
+                <div class="absolute top-14 left-0 w-full h-3 bg-gray-100 rounded-full shadow-inner -z-20"></div>
+                <div
+                    class="absolute top-14 left-0 w-full h-3 bg-gradient-to-r from-accent-teal via-blue-500 to-primary-blue rounded-full shadow-lg origin-left animate-flow-pipe -z-10 opacity-80">
+                </div>
+
+                <!-- Step 1 -->
+                <div class="flex flex-col items-center text-center w-1/5 group perspective-item">
+                    <div
+                        class="card-3d w-28 h-28 bg-white rounded-2xl flex items-center justify-center mb-6 relative z-10 transform transition-transform duration-500 hover:rotate-y-12 shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-b-4 border-blue-500">
+                        <div
+                            class="w-20 h-20 bg-blue-50 rounded-xl flex items-center justify-center transform translate-z-10 group-hover:translate-z-20 transition-transform duration-500">
+                            <i class="fas fa-keyboard text-3xl text-blue-600 animate-float"></i>
+                        </div>
+                        <div
+                            class="absolute -top-3 -right-3 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold shadow-lg border-2 border-white transform translate-z-30">
+                            1</div>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary-blue mb-2 transform translate-z-10">Input Data</h3>
+                    <p class="text-gray-600 text-sm px-2 transform translate-z-5">Enter product specs & category.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex flex-col items-center text-center w-1/5 group perspective-item delay-200">
+                    <div
+                        class="card-3d w-28 h-28 bg-white rounded-2xl flex items-center justify-center mb-6 relative z-10 transform transition-transform duration-500 hover:rotate-y-12 shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-b-4 border-purple-500">
+                        <div
+                            class="w-20 h-20 bg-purple-50 rounded-xl flex items-center justify-center transform translate-z-10 group-hover:translate-z-20 transition-transform duration-500">
+                            <i class="fas fa-brain text-4xl text-purple-600 animate-float delay-100"></i>
+                        </div>
+                        <div
+                            class="absolute -top-3 -right-3 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold shadow-lg border-2 border-white transform translate-z-30">
+                            2</div>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary-blue mb-2 transform translate-z-10">AI Analysis</h3>
+                    <p class="text-gray-600 text-sm px-2 transform translate-z-5">ML algorithms process needs.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex flex-col items-center text-center w-1/5 group perspective-item delay-400">
+                    <div
+                        class="card-3d w-28 h-28 bg-white rounded-2xl flex items-center justify-center mb-6 relative z-10 transform transition-transform duration-500 hover:rotate-y-12 shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-b-4 border-teal-500">
+                        <div
+                            class="w-20 h-20 bg-teal-50 rounded-xl flex items-center justify-center transform translate-z-10 group-hover:translate-z-20 transition-transform duration-500">
+                            <i class="fas fa-search-dollar text-3xl text-teal-600 animate-float delay-200"></i>
+                        </div>
+                        <div
+                            class="absolute -top-3 -right-3 w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold shadow-lg border-2 border-white transform translate-z-30">
+                            3</div>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary-blue mb-2 transform translate-z-10">Matching</h3>
+                    <p class="text-gray-600 text-sm px-2 transform translate-z-5">Find optimal eco-materials.</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="flex flex-col items-center text-center w-1/5 group perspective-item delay-600">
+                    <div
+                        class="card-3d w-28 h-28 bg-white rounded-2xl flex items-center justify-center mb-6 relative z-10 transform transition-transform duration-500 hover:rotate-y-12 shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-b-4 border-green-500">
+                        <div
+                            class="w-20 h-20 bg-green-50 rounded-xl flex items-center justify-center transform translate-z-10 group-hover:translate-z-20 transition-transform duration-500">
+                            <i class="fas fa-check-circle text-3xl text-green-600 animate-float delay-300"></i>
+                        </div>
+                        <div
+                            class="absolute -top-3 -right-3 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold shadow-lg border-2 border-white transform translate-z-30">
+                            4</div>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary-blue mb-2 transform translate-z-10">Results</h3>
+                    <p class="text-gray-600 text-sm px-2 transform translate-z-5">Get top 3 recommendations.</p>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="flex flex-col items-center text-center w-1/5 group perspective-item delay-800">
+                    <div
+                        class="card-3d w-28 h-28 bg-white rounded-2xl flex items-center justify-center mb-6 relative z-10 transform transition-transform duration-500 hover:rotate-y-12 shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-b-4 border-orange-500">
+                        <div
+                            class="w-20 h-20 bg-orange-50 rounded-xl flex items-center justify-center transform translate-z-10 group-hover:translate-z-20 transition-transform duration-500">
+                            <i class="fas fa-file-pdf text-3xl text-orange-600 animate-float delay-400"></i>
+                        </div>
+                        <div
+                            class="absolute -top-3 -right-3 w-8 h-8 bg-orange-600 text-white rounded-full flex items-center justify-center font-bold shadow-lg border-2 border-white transform translate-z-30">
+                            5</div>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary-blue mb-2 transform translate-z-10">Report</h3>
+                    <p class="text-gray-600 text-sm px-2 transform translate-z-5">Download detailed PDF.</p>
+                </div>
+            </div>
+
+            <!-- Mobile Layout: Vertical 3D Cards -->
+            <div class="lg:hidden space-y-8 relative px-4">
+                <!-- Connecting Line -->
+                <div class="absolute top-0 bottom-0 left-8 w-1 bg-gray-200 -z-10 rounded-full"></div>
+                <div
+                    class="absolute top-0 h-full left-8 w-1 bg-gradient-to-b from-accent-teal to-blue-600 -z-10 rounded-full animate-flow-pipe-vertical opacity-80">
+                </div>
+
+                <!-- Items -->
+                <div class="flex gap-6 items-center relative group">
+                    <div
+                        class="w-16 h-16 bg-white border-4 border-white shadow-lg rounded-xl flex-shrink-0 flex items-center justify-center z-10 transform transition-transform active:scale-95">
+                        <div
+                            class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center font-bold text-blue-600 text-xl transform">
+                            1</div>
+                    </div>
+                    <div
+                        class="bg-white p-6 rounded-xl shadow-md border-l-4 border-blue-500 flex-grow transform transition-all hover:translate-x-2">
+                        <h3 class="font-bold text-lg text-primary-blue mb-1">Input Data</h3>
+                        <p class="text-gray-600 text-sm">Product specs & category.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 items-center relative group">
+                    <div
+                        class="w-16 h-16 bg-white border-4 border-white shadow-lg rounded-xl flex-shrink-0 flex items-center justify-center z-10 transform transition-transform active:scale-95">
+                        <div
+                            class="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center font-bold text-purple-600 text-xl">
+                            2</div>
+                    </div>
+                    <div
+                        class="bg-white p-6 rounded-xl shadow-md border-l-4 border-purple-500 flex-grow transform transition-all hover:translate-x-2">
+                        <h3 class="font-bold text-lg text-primary-blue mb-1">AI Analysis</h3>
+                        <p class="text-gray-600 text-sm">Processing sustainability data.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 items-center relative group">
+                    <div
+                        class="w-16 h-16 bg-white border-4 border-white shadow-lg rounded-xl flex-shrink-0 flex items-center justify-center z-10 transform transition-transform active:scale-95">
+                        <div
+                            class="w-12 h-12 bg-teal-50 rounded-lg flex items-center justify-center font-bold text-teal-600 text-xl">
+                            3</div>
+                    </div>
+                    <div
+                        class="bg-white p-6 rounded-xl shadow-md border-l-4 border-teal-500 flex-grow transform transition-all hover:translate-x-2">
+                        <h3 class="font-bold text-lg text-primary-blue mb-1">Matching</h3>
+                        <p class="text-gray-600 text-sm">Finding optimal materials.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 items-center relative group">
+                    <div
+                        class="w-16 h-16 bg-white border-4 border-white shadow-lg rounded-xl flex-shrink-0 flex items-center justify-center z-10 transform transition-transform active:scale-95">
+                        <div
+                            class="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center font-bold text-green-600 text-xl">
+                            4</div>
+                    </div>
+                    <div
+                        class="bg-white p-6 rounded-xl shadow-md border-l-4 border-green-500 flex-grow transform transition-all hover:translate-x-2">
+                        <h3 class="font-bold text-lg text-primary-blue mb-1">Results</h3>
+                        <p class="text-gray-600 text-sm">Top 3 eco-recommendations.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 items-center relative group">
+                    <div
+                        class="w-16 h-16 bg-white border-4 border-white shadow-lg rounded-xl flex-shrink-0 flex items-center justify-center z-10 transform transition-transform active:scale-95">
+                        <div
+                            class="w-12 h-12 bg-orange-50 rounded-lg flex items-center justify-center font-bold text-orange-600 text-xl">
+                            5</div>
+                    </div>
+                    <div
+                        class="bg-white p-6 rounded-xl shadow-md border-l-4 border-orange-500 flex-grow transform transition-all hover:translate-x-2">
+                        <h3 class="font-bold text-lg text-primary-blue mb-1">Report</h3>
+                        <p class="text-gray-600 text-sm">Download comprehensive PDF.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            /* 3D Animations */
+            .perspective-item {
+                perspective: 1000px;
+            }
+
+            .card-3d {
+                transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                transform-style: preserve-3d;
+            }
+
+            .rotate-y-12 {
+                transform: rotateY(12deg) rotateX(5deg);
+            }
+
+            .translate-z-10 {
+                transform: translateZ(10px);
+            }
+
+            .translate-z-20 {
+                transform: translateZ(20px);
+            }
+
+            .translate-z-30 {
+                transform: translateZ(30px);
+            }
+
+            @keyframes float {
+
+                0%,
+                100% {
+                    transform: translateY(0) translateZ(10px);
+                }
+
+                50% {
+                    transform: translateY(-8px) translateZ(10px);
+                }
+            }
+
+            .animate-float {
+                animation: float 3s ease-in-out infinite;
+                transform-style: preserve-3d;
+            }
+
+            @keyframes flow-pipe {
+                0% {
+                    width: 0%;
+                    opacity: 0;
+                }
+
+                50% {
+                    opacity: 1;
+                }
+
+                100% {
+                    width: 100%;
+                    opacity: 0.8;
+                }
+            }
+
+            .animate-flow-pipe {
+                animation: flow-pipe 2.5s ease-out forwards;
+            }
+
+            @keyframes flow-pipe-vertical {
+                0% {
+                    height: 0%;
+                    opacity: 0;
+                }
+
+                50% {
+                    opacity: 1;
+                }
+
+                100% {
+                    height: 100%;
+                    opacity: 0.8;
+                }
+            }
+
+            .animate-flow-pipe-vertical {
+                animation: flow-pipe-vertical 2.5s ease-out forwards;
+            }
+
+            /* Staggered delays for float animation */
+            .delay-100 {
+                animation-delay: 0.2s;
+            }
+
+            .delay-200 {
+                animation-delay: 0.4s;
+            }
+
+            .delay-300 {
+                animation-delay: 0.6s;
+            }
+
+            .delay-400 {
+                animation-delay: 0.8s;
+            }
+
+            .delay-600 {
+                animation-delay: 1.2s;
+            }
+
+            .delay-700 {
+                animation-delay: 1.4s;
+            }
+
+            .delay-800 {
+                animation-delay: 1.6s;
+            }
+        </style>
+    </section>
+
+    <!-- Technology Stack (Refined Theme) -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-primary-blue mb-4">Powered By Modern Technology</h2>
+                <div class="w-20 h-1 bg-accent-teal mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                <!-- Python -->
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col items-center text-center group">
+                    <div
+                        class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-100 transition-colors">
+                        <i class="fab fa-python text-2xl text-blue-600"></i>
+                    </div>
+                    <span class="font-semibold text-gray-700">Python</span>
+                </div>
+
+                <!-- Flask -->
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col items-center text-center group">
+                    <div
+                        class="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-flask text-2xl text-gray-600"></i>
+                    </div>
+                    <span class="font-semibold text-gray-700">Flask</span>
+                </div>
+
+                <!-- Tailwind -->
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col items-center text-center group">
+                    <div
+                        class="w-12 h-12 bg-cyan-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-cyan-100 transition-colors">
+                        <i class="fab fa-css3-alt text-2xl text-cyan-600"></i>
+                    </div>
+                    <span class="font-semibold text-gray-700">Tailwind</span>
+                </div>
+
+                <!-- Chart.js -->
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col items-center text-center group">
+                    <div
+                        class="w-12 h-12 bg-orange-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-orange-100 transition-colors">
+                        <i class="fas fa-chart-pie text-2xl text-orange-600"></i>
+                    </div>
+                    <span class="font-semibold text-gray-700">Chart.js</span>
+                </div>
+
+                <!-- PostgreSQL -->
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col items-center text-center group">
+                    <div
+                        class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-100 transition-colors">
+                        <i class="fas fa-database text-2xl text-blue-800"></i>
+                    </div>
+                    <span class="font-semibold text-gray-700">PostgreSQL</span>
+                </div>
+
+                <!-- Scikit-learn -->
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col items-center text-center group">
+                    <div
+                        class="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-100 transition-colors">
+                        <i class="fas fa-brain text-2xl text-purple-600"></i>
+                    </div>
+                    <span class="font-semibold text-gray-700">Scikit-learn</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section (Consistent Theme) -->
+    <section class="py-20 bg-primary-blue relative overflow-hidden">
+        <!-- Abstract shapes matching index theme -->
+        <div
+            class="absolute top-0 right-0 w-96 h-96 bg-white opacity-5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-64 h-64 bg-accent-teal opacity-10 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2">
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Start Your Sustainable Journey</h2>
+            <p class="text-blue-100 text-lg mb-10 max-w-2xl mx-auto">
+                Join thousands of businesses optimizing their packaging with EcoPackAI.
+            </p>
+            <a href="/#analysis"
+                class="inline-block bg-accent-teal text-white font-bold py-4 px-10 rounded-lg shadow-lg hover:bg-teal-400 transition-all transform hover:-translate-y-1">
+                Analyze My Needs <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 border-t border-gray-200 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-600">&copy; 2026 EcoPackAI. Made with &hearts; by αикιт 007...</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

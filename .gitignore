@@ -1,0 +1,23 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables
+.env
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# IDE settings
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Project specific
+test_output.txt

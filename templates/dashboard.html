@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoPackAI | BI Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #1A365D 0%, #4FD1C5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .teal-btn {
+            background-color: #4FD1C5;
+            box-shadow: 0 4px 12px rgba(79, 209, 197, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .teal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(79, 209, 197, 0.4);
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+            margin-bottom: 2rem;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 350px;
+        }
+
+        .spinner {
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #4FD1C5;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #1A365D 0%, #2d5a8c 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: rgba(79, 209, 197, 0.1);
+            border-radius: 50%;
+        }
+
+        .stat-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #4FD1C5;
+            margin: 0.5rem 0;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .tab-active {
+            color: #4FD1C5;
+            border-bottom: 3px solid #4FD1C5;
+        }
+
+        .tab-inactive {
+            color: #64748b;
+            border-bottom: 3px solid transparent;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100 shadow-sm">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <div
+                        class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-blue to-accent-teal flex items-center justify-center">
+                        <i class="fas fa-leaf text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-blue-900">EcoPackAI Dashboard</h1>
+                        <p class="text-xs text-gray-500">Sustainability Intelligence</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="/" class="text-gray-700 hover:text-teal-500 font-medium transition-colors">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="/categories" class="text-gray-700 hover:text-teal-500 font-medium transition-colors">
+                        <i class="fas fa-th mr-2"></i>Categories
+                    </a>
+                    <a href="/dashboard" class="text-teal-500 font-medium">
+                        <i class="fas fa-chart-line mr-2"></i>Dashboard
+                    </a>
+                    <a href="/how-it-works" class="text-gray-700 hover:text-teal-500 font-medium transition-colors">
+                        <i class="fas fa-lightbulb mr-2"></i>How It Works
+                    </a>
+                    <a href="/about" class="text-gray-700 hover:text-teal-500 font-medium transition-colors">
+                        <i class="fas fa-info-circle mr-2"></i>About
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-6 py-12">
+        <!-- Header -->
+        <div class="mb-12">
+            <h1 class="text-4xl font-bold mb-3">
+                <span class="text-blue-900">Sustainability</span>
+                <span class="gradient-text">Intelligence Dashboard</span>
+            </h1>
+            <p class="text-gray-600 text-lg max-w-3xl">
+                Real-time insights into sustainable packaging materials, environmental impact reduction, and
+                cost-benefit analysis
+            </p>
+        </div>
+
+        <!-- Key Metrics Row -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <!-- Total Materials -->
+            <div class="stat-box card-shadow">
+                <div class="stat-content">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="stat-label">Total Materials</div>
+                        <i class="fas fa-box text-2xl opacity-30"></i>
+                    </div>
+                    <div class="stat-value" id="totalMaterials">-</div>
+                    <div class="text-xs text-gray-300">Available in catalog</div>
+                </div>
+            </div>
+
+            <!-- Eco-Friendly Materials -->
+            <div class="stat-box card-shadow">
+                <div class="stat-content">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="stat-label">Eco-Friendly</div>
+                        <i class="fas fa-leaf text-2xl opacity-30"></i>
+                    </div>
+                    <div class="stat-value" id="ecoMaterials">-</div>
+                    <div class="text-xs text-gray-300">High biodegradability</div>
+                </div>
+            </div>
+
+            <!-- Avg CO2 Score -->
+            <div class="stat-box card-shadow">
+                <div class="stat-content">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="stat-label">Avg CO₂ Score</div>
+                        <i class="fas fa-cloud text-2xl opacity-30"></i>
+                    </div>
+                    <div class="stat-value" id="avgCO2">-</div>
+                    <div class="text-xs text-gray-300">Per unit emission</div>
+                </div>
+            </div>
+
+            <!-- Avg Cost -->
+            <div class="stat-box card-shadow">
+                <div class="stat-content">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="stat-label">Avg Cost</div>
+                        <i class="fas fa-dollar-sign text-2xl opacity-30"></i>
+                    </div>
+                    <div class="stat-value" id="avgCost">-</div>
+                    <div class="text-xs text-gray-300">Per unit cost</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="space-y-8 mb-12">
+            <div class="flex justify-end items-center mb-2 space-x-4">
+                <div id="chartsLastUpdated" class="text-xs text-gray-500">Last updated: -</div>
+                <button id="refreshCharts"
+                    class="text-xs px-3 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200">Refresh</button>
+                <button id="exportPdfBtn"
+                    class="text-xs px-3 py-1 rounded-md teal-btn text-white hover:opacity-95">Export PDF</button>
+                <div id="exportStatus" class="text-xs text-gray-500" style="display:none; align-items:center; gap:8px;">
+                    <div class="spinner" style="width:20px;height:20px;border-width:3px;border-top-width:3px;"></div>
+                    <span id="exportStatusText">Preparing PDF…</span>
+                </div>
+            </div>
+            <!-- Top: stacked CO₂ Emissions & Cost (single column for clarity) -->
+            <div class="flex flex-col gap-8">
+                <!-- CO2 Emissions Comparison -->
+                <div class="bg-white card-shadow rounded-xl p-6 border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-blue-900 flex items-center">
+                            <i class="fas fa-chart-bar text-teal-500 mr-2"></i>
+                            CO₂ Emissions by Material
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <button id="co2ToggleLabels" title="Toggle material labels"
+                                class="text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                data-visible="false" aria-pressed="false">Show labels</button>
+                            <button class="text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                onclick="showChartInfo('co2')" title="Chart info"><i
+                                    class="fas fa-info-circle"></i></button>
+                            <button class="text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                onclick="downloadChartCSV('co2','CO2_Emissions')">Export CSV</button>
+                            <button class="text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                onclick="downloadChartPNG('co2Chart','co2_emissions')">Export PNG</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="loading" id="co2Loading">
+                            <div class="spinner"></div>
+                        </div>
+                        <canvas id="co2Chart" style="display:none;"></canvas>
+                    </div>
+                </div>
+
+                <!-- Cost Analysis -->
+                <div class="bg-white card-shadow rounded-xl p-6 border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-blue-900 flex items-center">
+                            <i class="fas fa-chart-line text-teal-500 mr-2"></i>
+                            Cost Analysis
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <button id="costToggleLabels" title="Toggle material labels"
+                                class="text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                data-visible="false" aria-pressed="false">Show labels</button>
+                            <button class="text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                onclick="showChartInfo('cost')" title="Chart info"><i
+                                    class="fas fa-info-circle"></i></button>
+                            <button class="text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                onclick="downloadChartCSV('cost','Cost_Analysis')">Export CSV</button>
+                            <button class="text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                onclick="downloadChartPNG('costChart','cost_analysis')">Export PNG</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="loading" id="costLoading">
+                            <div class="spinner"></div>
+                        </div>
+                        <canvas id="costChart" style="display:none;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom: Biodegradability & Recyclability side-by-side -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Biodegradability Score -->
+                <div class="bg-white card-shadow rounded-xl p-6 border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-blue-900 flex items-center">
+                            <i class="fas fa-leaf text-teal-500 mr-2"></i>
+                            Biodegradability Score
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <button id="bioToggleLabels" title="Toggle material labels"
+                                class="text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                data-visible="false" aria-pressed="false">Show labels</button>
+                            <button class="text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                onclick="showChartInfo('bio')" title="Chart info"><i
+                                    class="fas fa-info-circle"></i></button>
+                            <button class="text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                onclick="downloadChartCSV('bio','Biodegradability')">Export CSV</button>
+                            <button class="text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                onclick="downloadChartPNG('bioChart','biodegradability')">Export PNG</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="loading" id="bioLoading">
+                            <div class="spinner"></div>
+                        </div>
+                        <canvas id="bioChart" style="display:none;"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recyclability Percent -->
+                <div class="bg-white card-shadow rounded-xl p-6 border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-blue-900 flex items-center">
+                            <i class="fas fa-recycle text-teal-500 mr-2"></i>
+                            Recyclability Percentage
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <button class="text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                onclick="showChartInfo('recycle')" title="Chart info"><i
+                                    class="fas fa-info-circle"></i></button>
+                            <button class="text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                onclick="downloadChartCSV('recycle','recyclability')">Export CSV</button>
+                            <button class="text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                onclick="downloadChartPNG('recycleChart','recyclability')">Export PNG</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="loading" id="recycleLoading">
+                            <div class="spinner"></div>
+                        </div>
+                        <canvas id="recycleChart" style="display:none;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sustainability Metrics -->
+        <!-- Sustainability Metrics Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+            <!-- Environmental Impact -->
+            <div class="bg-white card-shadow rounded-xl p-5 border border-gray-100">
+                <h2 class="text-lg font-bold text-blue-900 mb-4 flex items-center">
+                    <i class="fas fa-earth-americas text-teal-500 mr-2"></i>
+                    Environmental Impact
+                </h2>
+                <div class="space-y-3" id="ecoImpactMetrics">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Material Suitability -->
+            <div class="lg:col-span-2 bg-white card-shadow rounded-xl p-5 border border-gray-100">
+                <h2 class="text-lg font-bold text-blue-900 mb-4 flex items-center">
+                    <i class="fas fa-cubes text-teal-500 mr-2"></i>
+                    Material Suitability by Category
+                </h2>
+                <div id="suitabilityList" class="space-y-2 max-h-72 overflow-y-auto">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Performers -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-12">
+            <!-- Lowest CO2 -->
+            <div class="bg-white card-shadow rounded-xl p-6 border border-gray-100">
+                <h3 class="font-bold text-blue-900 mb-4 flex items-center text-sm">
+                    <i class="fas fa-wind text-teal-500 mr-2"></i>
+                    Lowest CO₂ Materials
+                </h3>
+                <div id="lowestCO2" class="space-y-3">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+                <div class="text-center mt-2">
+                    <button id="lowestCO2ShowMore" class="text-sm text-teal-600 hover:underline"
+                        data-expanded="false">Show more</button>
+                </div>
+            </div>
+
+            <!-- Highest Biodegradability -->
+            <div class="bg-white card-shadow rounded-xl p-6 border border-gray-100">
+                <h3 class="font-bold text-blue-900 mb-4 flex items-center text-sm">
+                    <i class="fas fa-sprout text-teal-500 mr-2"></i>
+                    Highest Biodegradability
+                </h3>
+                <div id="highestBio" class="space-y-3">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+                <div class="text-center mt-2">
+                    <button id="highestBioShowMore" class="text-sm text-teal-600 hover:underline"
+                        data-expanded="false">Show more</button>
+                </div>
+            </div>
+
+            <!-- Highest Recyclability -->
+            <div class="bg-white card-shadow rounded-xl p-6 border border-gray-100">
+                <h3 class="font-bold text-blue-900 mb-4 flex items-center text-sm">
+                    <i class="fas fa-arrows-rotate text-teal-500 mr-2"></i>
+                    Highest Recyclability
+                </h3>
+                <div id="highestRecycle" class="space-y-3">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+                <div class="text-center mt-2">
+                    <button id="highestRecycleShowMore" class="text-sm text-teal-600 hover:underline"
+                        data-expanded="false">Show more</button>
+                </div>
+            </div>
+
+            <!-- Cost Effective Eco -->
+            <div class="bg-white card-shadow rounded-xl p-6 border border-gray-100">
+                <h3 class="font-bold text-blue-900 mb-4 flex items-center text-sm">
+                    <i class="fas fa-star text-teal-500 mr-2"></i>
+                    Cost-Effective Eco
+                </h3>
+                <div id="costEffectiveEco" class="space-y-3">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+                <div class="text-center mt-2">
+                    <button id="costEffectiveShowMore" class="text-sm text-teal-600 hover:underline"
+                        data-expanded="false">Show more</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Chart Info Modal -->
+    <div id="chartInfoModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 backdrop-blur-sm"
+        onclick="if(event.target === this) closeChartInfo()">
+        <div
+            class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 overflow-hidden transform transition-all scale-100">
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-bold text-blue-900" id="modalTitle">Chart Information</h3>
+                    <button onclick="closeChartInfo()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="prose prose-sm text-gray-600 space-y-3" id="modalContent">
+                    <!-- Content will be injected here -->
+                </div>
+            </div>
+            <div class="bg-gray-50 px-6 py-4 flex justify-end">
+                <button onclick="closeChartInfo()"
+                    class="bg-primary-blue text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors shadow-sm">
+                    Got it
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store chart instances
+        let charts = {};
+
+        // Initialize dashboard on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            loadDashboardData();
+        });
+
+        // Load all dashboard data
+        async function loadDashboardData() {
+            try {
+                await Promise.all([
+                    loadDashboardStats(),
+                    loadMaterialComparison(),
+                    loadSustainabilityMetrics(),
+                    loadEcoImpact(),
+                    loadMaterialSuitability()
+                ]);
+
+                // Attach show-more handlers (toggle between 4 and 10)
+                document.getElementById('lowestCO2ShowMore').addEventListener('click', async function () {
+                    const expanded = this.dataset.expanded === 'true';
+                    await loadSustainabilityMetrics(expanded ? 4 : 10, 'lowest_co2');
+                    this.dataset.expanded = (!expanded).toString();
+                    this.textContent = expanded ? 'Show more' : 'Show less';
+                });
+
+                document.getElementById('highestBioShowMore').addEventListener('click', async function () {
+                    const expanded = this.dataset.expanded === 'true';
+                    await loadSustainabilityMetrics(expanded ? 4 : 10, 'highest_bio');
+                    this.dataset.expanded = (!expanded).toString();
+                    this.textContent = expanded ? 'Show more' : 'Show less';
+                });
+
+                document.getElementById('highestRecycleShowMore').addEventListener('click', async function () {
+                    const expanded = this.dataset.expanded === 'true';
+                    await loadSustainabilityMetrics(expanded ? 4 : 10, 'highest_recycle');
+                    this.dataset.expanded = (!expanded).toString();
+                    this.textContent = expanded ? 'Show more' : 'Show less';
+                });
+
+                document.getElementById('costEffectiveShowMore').addEventListener('click', async function () {
+                    const expanded = this.dataset.expanded === 'true';
+                    await loadSustainabilityMetrics(expanded ? 4 : 10, 'cost_effective');
+                    this.dataset.expanded = (!expanded).toString();
+                    this.textContent = expanded ? 'Show more' : 'Show less';
+                });
+
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        // Load dashboard statistics
+        async function loadDashboardStats() {
+            try {
+                const response = await fetch('/api/dashboard-stats');
+                const data = await response.json();
+
+                document.getElementById('totalMaterials').textContent = data.total_materials;
+                document.getElementById('ecoMaterials').textContent = data.eco_friendly_count;
+                document.getElementById('avgCO2').textContent = data.avg_co2.toFixed(2);
+                document.getElementById('avgCost').textContent = 'Rs. ' + data.avg_cost.toFixed(2);
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // Load material comparison and create charts
+        async function loadMaterialComparison() {
+            try {
+                const response = await fetch('/api/material-comparison');
+                const data = await response.json();
+
+                // Create CO2 Chart
+                createCO2Chart(data);
+                // Create Cost Chart
+                createCostChart(data);
+                // Create Biodegradability Chart
+                createBioChart(data);
+                // Create Recyclability Chart
+                createRecycleChart(data);
+                // Update last-updated timestamp when charts refreshed
+                markChartsUpdated();
+            } catch (error) {
+                console.error('Error loading material comparison:', error);
+            }
+        }
+
+        // Create CO2 Emissions Chart
+        function createCO2Chart(data) {
+            const ctx = document.getElementById('co2Chart');
+            const loading = document.getElementById('co2Loading');
+
+            const materials = data.map(d => d.material);
+            const co2Values = data.map(d => d.co2_normalized);
+
+            ctx.style.display = 'block';
+            loading.style.display = 'none';
+
+            charts.co2 = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: materials,
+                    datasets: [{
+                        label: 'CO₂ Efficiency (Normalized 0-1)',
+                        data: co2Values,
+                        backgroundColor: 'rgba(79, 209, 197, 0.8)',
+                        borderColor: 'rgba(79, 209, 197, 1)',
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                afterLabel: function (context) {
+                                    return '(1 = Best, 0 = Worst)';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { display: false }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 1,
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                            title: {
+                                display: true,
+                                text: 'Efficiency Score (0-1)'
+                            }
+                        }
+                    }
+                }
+            });
+            // Persisted toggle for labels (localStorage)
+            applyToggleState('co2ToggleLabels', 'co2', function (visible) {
+                charts.co2.options.scales.x.ticks.display = !!visible;
+                charts.co2.update();
+            });
+        }
+
+        // Create Cost Chart
+        function createCostChart(data) {
+            const ctx = document.getElementById('costChart');
+            const loading = document.getElementById('costLoading');
+
+            const materials = data.map(d => d.material);
+            const costValues = data.map(d => d.cost_normalized);
+
+            ctx.style.display = 'block';
+            loading.style.display = 'none';
+
+            charts.cost = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: materials,
+                    datasets: [{
+                        label: 'Cost Efficiency (Normalized 0-1)',
+                        data: costValues,
+                        borderColor: 'rgba(26, 54, 93, 0.8)',
+                        backgroundColor: 'rgba(79, 209, 197, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        pointBackgroundColor: 'rgba(79, 209, 197, 1)',
+                        pointBorderColor: 'white',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                afterLabel: function (context) {
+                                    return '(1 = Best, 0 = Worst)';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { display: false }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 1,
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                            title: {
+                                display: true,
+                                text: 'Efficiency Score (0-1)'
+                            }
+                        }
+                    }
+                }
+            });
+            // Persisted toggle for labels (localStorage)
+            applyToggleState('costToggleLabels', 'cost', function (visible) {
+                charts.cost.options.scales.x.ticks.display = !!visible;
+                charts.cost.update();
+            });
+        }
+
+        // Create Biodegradability Chart
+        function createBioChart(data) {
+            const ctx = document.getElementById('bioChart');
+            const loading = document.getElementById('bioLoading');
+
+            const materials = data.map(d => d.material);
+            const bioValues = data.map(d => d.biodegradability);
+
+            ctx.style.display = 'block';
+            loading.style.display = 'none';
+
+            charts.bio = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: materials,
+                    datasets: [{
+                        label: 'Biodegradability Score',
+                        data: bioValues,
+                        borderColor: 'rgba(79, 209, 197, 0.8)',
+                        backgroundColor: 'rgba(79, 209, 197, 0.2)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(79, 209, 197, 1)',
+                        pointBorderColor: 'white',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            pointLabels: { display: false }
+                        }
+                    }
+                }
+            });
+            // Persisted toggle for radar point labels (localStorage)
+            applyToggleState('bioToggleLabels', 'bio', function (visible) {
+                charts.bio.options.scales.r.pointLabels.display = !!visible;
+                charts.bio.update();
+            });
+        }
+
+        // Create Recyclability Chart
+        function createRecycleChart(data) {
+            const ctx = document.getElementById('recycleChart');
+            const loading = document.getElementById('recycleLoading');
+
+            const materials = data.map(d => d.material);
+            const recycleValues = data.map(d => d.recyclability);
+
+            ctx.style.display = 'block';
+            loading.style.display = 'none';
+
+            charts.recycle = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: materials.slice(0, 5),
+                    datasets: [{
+                        data: recycleValues.slice(0, 5),
+                        backgroundColor: [
+                            'rgba(79, 209, 197, 1)',
+                            'rgba(79, 209, 197, 0.8)',
+                            'rgba(79, 209, 197, 0.6)',
+                            'rgba(79, 209, 197, 0.4)',
+                            'rgba(79, 209, 197, 0.2)'
+                        ],
+                        borderColor: 'white',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // Load sustainability metrics
+        async function loadSustainabilityMetrics(limit = 4, section = null) {
+            try {
+                const response = await fetch(`/api/sustainability-metrics?limit=${limit}`);
+                const data = await response.json();
+
+                // Helper to generate the card html
+                const makeCO2Card = (item) => `
+                    <div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
+                        <div class="font-semibold text-sm text-blue-900">${item.Material_Type}</div>
+                        <div class="text-xs text-blue-600 mt-1">CO₂: ${item.CO2_Emission_Score}</div>
+                    </div>`;
+
+                const makeBioCard = (item) => `
+                    <div class="p-3 bg-green-50 rounded-lg border border-green-100">
+                        <div class="font-semibold text-sm text-green-900">${item.Material_Type}</div>
+                        <div class="text-xs text-green-600 mt-1">${item.Biodegradability_Score}%</div>
+                    </div>`;
+
+                const makeRecycleCard = (item) => `
+                    <div class="p-3 bg-teal-50 rounded-lg border border-teal-100">
+                        <div class="font-semibold text-sm text-teal-900">${item.Material_Type}</div>
+                        <div class="text-xs text-teal-600 mt-1">${item.Recyclability_Percent}%</div>
+                    </div>`;
+
+                const makeCostEcoCard = (item) => `
+                    <div class="p-3 bg-yellow-50 rounded-lg border border-yellow-100">
+                        <div class="font-semibold text-sm text-yellow-900">${item.Material_Type}</div>
+                        <div class="text-xs text-yellow-600 mt-1">Rs. ${item.Cost_per_unit} | ${item.Biodegradability_Score}% bio</div>
+                    </div>`;
+
+                // If no specific section requested, populate all sections
+                if (!section || section === 'all') {
+                    let html = '';
+                    data.lowest_co2_materials.forEach(item => html += makeCO2Card(item));
+                    document.getElementById('lowestCO2').innerHTML = html;
+
+                    html = '';
+                    data.highest_biodegradability.forEach(item => html += makeBioCard(item));
+                    document.getElementById('highestBio').innerHTML = html;
+
+                    html = '';
+                    data.highest_recyclability.forEach(item => html += makeRecycleCard(item));
+                    document.getElementById('highestRecycle').innerHTML = html;
+
+                    html = '';
+                    data.cost_effective_eco.forEach(item => html += makeCostEcoCard(item));
+                    document.getElementById('costEffectiveEco').innerHTML = html;
+                } else {
+                    // Populate only the requested section
+                    if (section === 'lowest_co2') {
+                        let html = '';
+                        data.lowest_co2_materials.forEach(item => html += makeCO2Card(item));
+                        document.getElementById('lowestCO2').innerHTML = html;
+                    }
+                    if (section === 'highest_bio') {
+                        let html = '';
+                        data.highest_biodegradability.forEach(item => html += makeBioCard(item));
+                        document.getElementById('highestBio').innerHTML = html;
+                    }
+                    if (section === 'highest_recycle') {
+                        let html = '';
+                        data.highest_recyclability.forEach(item => html += makeRecycleCard(item));
+                        document.getElementById('highestRecycle').innerHTML = html;
+                    }
+                    if (section === 'cost_effective') {
+                        let html = '';
+                        data.cost_effective_eco.forEach(item => html += makeCostEcoCard(item));
+                        document.getElementById('costEffectiveEco').innerHTML = html;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading sustainability metrics:', error);
+            }
+        }
+
+        // Load eco impact data
+        async function loadEcoImpact() {
+            try {
+                const response = await fetch('/api/eco-impact');
+                const data = await response.json();
+
+                const html = `
+                    <div class="space-y-3">
+                        <div class="p-3 bg-gradient-to-r from-teal-50 to-green-50 rounded-lg border border-teal-100">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="text-xs font-semibold text-gray-700">Eco Materials</div>
+                                    <div class="text-xl font-bold text-teal-600 mt-1">${data.eco_materials_available}</div>
+                                </div>
+                                <i class="fas fa-leaf text-2xl text-teal-300"></i>
+                            </div>
+                            <div class="text-xs text-gray-600 mt-1">${data.percentage_eco_in_catalog}% of catalog</div>
+                        </div>
+
+                        <div class="p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-100">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="text-xs font-semibold text-gray-700">CO₂ Reduction</div>
+                                    <div class="text-xl font-bold text-blue-600 mt-1">${data.total_co2_reduction_potential}</div>
+                                </div>
+                                <i class="fas fa-cloud text-2xl text-blue-300"></i>
+                            </div>
+                            <div class="text-xs text-gray-600 mt-1">Total potential</div>
+                        </div>
+
+                        <div class="p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-100">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="text-xs font-semibold text-gray-700">Avg per Material</div>
+                                    <div class="text-xl font-bold text-green-600 mt-1">${data.avg_co2_reduction_per_material}</div>
+                                </div>
+                                <i class="fas fa-earth-americas text-2xl text-green-300"></i>
+                            </div>
+                            <div class="text-xs text-gray-600 mt-1">CO₂ savings</div>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('ecoImpactMetrics').innerHTML = html;
+            } catch (error) {
+                console.error('Error loading eco impact:', error);
+            }
+        }
+
+        // Load material suitability
+        async function loadMaterialSuitability() {
+            try {
+                const response = await fetch('/api/material-suitability');
+                const data = await response.json();
+
+                let html = '';
+                data.forEach(item => {
+                    html += `
+                        <div class="p-3 border border-gray-200 rounded-lg hover:border-teal-300 hover:bg-teal-50 transition-all">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <div class="font-semibold text-sm text-gray-900">${item.category}</div>
+                                    <div class="text-xs text-gray-600 mt-1">${item.material_count} materials</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xs font-bold text-teal-600">Rs. ${item.avg_cost.toFixed(2)}</div>
+                                    <div class="text-xs text-gray-500">${item.avg_biodegradability}% bio</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                document.getElementById('suitabilityList').innerHTML = html;
+            } catch (error) {
+                console.error('Error loading material suitability:', error);
+            }
+        }
+
+        // Additional helpers: mark updated, modal, export, persistence (added if missing)
+        if (typeof markChartsUpdated !== 'function') {
+            function markChartsUpdated() {
+                const el = document.getElementById('chartsLastUpdated');
+                if (el) el.textContent = 'Last updated: ' + new Date().toLocaleString();
+            }
+        }
+
+
+
+        if (typeof downloadChartCSV !== 'function') {
+            function downloadChartCSV(chartKey, filenamePrefix) {
+                const map = { co2: 'co2', cost: 'cost', bio: 'bio', recycle: 'recycle' };
+                const chart = charts[map[chartKey] || chartKey];
+                if (!chart) return alert('Chart not ready');
+                const labels = chart.data.labels || [];
+                const dataset = chart.data.datasets[0] || { data: [] };
+                const rows = [['Material', 'Value']];
+                labels.forEach((l, i) => rows.push([`"${l}"`, dataset.data[i] !== undefined ? dataset.data[i] : '']));
+                const csv = rows.map(r => r.join(',')).join('\n');
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${filenamePrefix}.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        if (typeof downloadChartPNG !== 'function') {
+            function downloadChartPNG(canvasId, filename) {
+                const canvas = document.getElementById(canvasId);
+                if (!canvas) return alert('Chart not ready');
+                const url = canvas.toDataURL('image/png');
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${filename}.png`;
+                a.click();
+            }
+        }
+
+        if (typeof applyToggleState !== 'function') {
+            function applyToggleState(btnId, chartKey, setterFn) {
+                const key = `${chartKey}_labels_visible`;
+                const btn = document.getElementById(btnId);
+                const stored = localStorage.getItem(key) === 'true';
+                setterFn(stored);
+                if (btn) {
+                    btn.dataset.visible = stored.toString();
+                    btn.setAttribute('aria-pressed', stored.toString());
+                    btn.textContent = stored ? 'Hide labels' : 'Show labels';
+                    btn.addEventListener('click', function () {
+                        const visible = this.dataset.visible === 'true';
+                        const newVisible = !visible;
+                        setterFn(newVisible);
+                        localStorage.setItem(key, newVisible.toString());
+                        this.dataset.visible = newVisible.toString();
+                        this.setAttribute('aria-pressed', newVisible.toString());
+                        this.textContent = newVisible ? 'Hide labels' : 'Show labels';
+                    });
+                }
+            }
+        }
+
+        // ensure refresh button is wired (script runs after DOM so button exists)
+        const refreshBtn = document.getElementById('refreshCharts');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', async function () {
+                await loadMaterialComparison();
+                markChartsUpdated();
+            });
+        }
+
+        // Export dashboard as PDF (server-side charts ensure consistent light theme)
+        const exportBtn = document.getElementById('exportPdfBtn');
+        const exportStatus = document.getElementById('exportStatus');
+        const exportStatusText = document.getElementById('exportStatusText');
+        async function exportDashboardPdf() {
+            if (!exportBtn) return;
+            try {
+                exportBtn.disabled = true;
+                exportStatus.style.display = 'flex';
+                exportStatusText.textContent = 'Preparing PDF…';
+
+                // Fetch dashboard data in parallel
+                const [statsResp, compResp, sustResp, ecoResp, suitabilityResp] = await Promise.all([
+                    fetch('/api/dashboard-stats'),
+                    fetch('/api/material-comparison'),
+                    fetch('/api/sustainability-metrics?limit=10'),
+                    fetch('/api/eco-impact'),
+                    fetch('/api/material-suitability')
+                ]);
+
+                if (!statsResp.ok || !compResp.ok) {
+                    throw new Error('Failed to fetch dashboard data for export');
+                }
+
+                const stats = await statsResp.json();
+                const comp = await compResp.json();
+                const sust = await sustResp.json();
+                const eco = await ecoResp.json();
+                const suitability = await suitabilityResp.json();
+
+                // Build payload for server-side chart generation
+                const payload = {
+                    stats, comp, sust, eco, suitability,
+                    // optional: include whatif data if present
+                };
+
+                const fd = new FormData();
+                fd.append('data', JSON.stringify(payload));
+                fd.append('limit', '10');
+
+                exportStatusText.textContent = 'Generating PDF on server…';
+                const resp = await fetch('/export/pdf', { method: 'POST', body: fd });
+                if (!resp.ok) {
+                    const err = await resp.json().catch(() => null);
+                    throw new Error((err && err.error) ? err.error : 'PDF generation failed');
+                }
+
+                exportStatusText.textContent = 'Downloading PDF…';
+                const blob = await resp.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'ecopackai_dashboard_report.pdf';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+
+                exportStatusText.textContent = 'Done';
+                setTimeout(() => { exportStatus.style.display = 'none'; }, 800);
+            } catch (e) {
+                alert('Export failed: ' + (e.message || e));
+                console.error(e);
+                exportStatus.style.display = 'none';
+            } finally {
+                if (exportBtn) exportBtn.disabled = false;
+            }
+        }
+
+        if (exportBtn) {
+            exportBtn.addEventListener('click', exportDashboardPdf);
+        }
+
+        // Chart Info Content
+        const chartInfo = {
+            'co2': {
+                title: 'CO₂ Emissions Analysis',
+                content: `
+                    <p>This chart compares the Carbon Dioxide (CO₂) emissions associated with each material's production and lifecycle. Lower values indicate a smaller carbon footprint.</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li><strong>Scores are normalized (0-1):</strong> A score of 1.0 represents the most eco-friendly material in the set (lowest emissions).</li>
+                        <li><strong>Data Source:</strong> Calculations are based on industry standard emission factors (kg CO₂ eq/kg material).</li>
+                        <li><strong>Why it matters:</strong> Reducing CO₂ emissions is critical for combating climate change and meeting sustainability goals.</li>
+                    </ul>`
+            },
+            'cost': {
+                title: 'Cost Efficiency Analysis',
+                content: `
+                    <p>This chart illustrates the cost-effectiveness of each packaging material. Higher scores represent lower costs per unit.</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li><strong>Scores are normalized (0-1):</strong> A score of 1.0 represents the most cost-effective material (lowest price).</li>
+                        <li><strong>Currency:</strong> All costs are calculated in Indian Rupees (₹).</li>
+                        <li><strong>Optimization:</strong> The goal is to find materials that balance low cost with high environmental performance.</li>
+                    </ul>`
+            },
+            'bio': {
+                title: 'Biodegradability Score',
+                content: `
+                    <p>This radar chart displays the biodegradability rating of each material, indicating how easily it breaks down in the environment.</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li><strong>Scale (0-100):</strong> Higher values indicate faster and more complete decomposition.</li>
+                        <li><strong>100%:</strong> Fully compostable materials that break down naturally without harmful residue.</li>
+                        <li><strong>0%:</strong> Non-biodegradable materials (like traditional plastics) that persist in the environment for centuries.</li>
+                    </ul>`
+            },
+            'recycle': {
+                title: 'Recyclability Percentage',
+                content: `
+                    <p>This doughnut chart shows the recyclability potential of the top materials. It represents the percentage of the material that can be recovered and reused.</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li><strong>High Recyclability:</strong> Materials like aluminum, glass, and certain papers can often be recycled indefinitely.</li>
+                        <li><strong>Circular Economy:</strong> Using recyclable materials reduces waste sent to landfills and decreases the demand for virgin raw materials.</li>
+                    </ul>`
+            }
+        };
+
+        function showChartInfo(chartType) {
+            const info = chartInfo[chartType];
+            if (info) {
+                document.getElementById('modalTitle').textContent = info.title;
+                document.getElementById('modalContent').innerHTML = info.content;
+                const modal = document.getElementById('chartInfoModal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                // Small delay to allow display:flex to apply before opacity transition
+                setTimeout(() => {
+                    modal.children[0].classList.remove('scale-95', 'opacity-0');
+                    modal.children[0].classList.add('scale-100', 'opacity-100');
+                }, 10);
+            }
+        }
+
+        function closeChartInfo() {
+            const modal = document.getElementById('chartInfoModal');
+            modal.children[0].classList.remove('scale-100', 'opacity-100');
+            modal.children[0].classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+            }, 300); // Wait for transition
+        }
+
+    </script>
+    <!-- Footer -->
+    <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-600">&copy; 2026 EcoPackAI. Made with &hearts; by αикιт 007...</p>
+        </div>
+    </footer>
+</body>
+
+</html>

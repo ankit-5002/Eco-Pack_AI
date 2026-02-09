@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | EcoPackAI</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom styles for the geometric grid background */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            background-image:
+                linear-gradient(to right, #EDF2F7 1px, transparent 1px),
+                linear-gradient(to bottom, #EDF2F7 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Custom gradient for emphasized text */
+        .gradient-text {
+            background: linear-gradient(135deg, #1A365D 0%, #4FD1C5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom shadow for cards */
+        .card-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Teal button with drop shadow */
+        .teal-btn {
+            background-color: #4FD1C5;
+            box-shadow: 0 4px 12px rgba(79, 209, 197, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .teal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(79, 209, 197, 0.4);
+        }
+
+        /* Feature card hover effect */
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Counter animation */
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-number {
+            animation: countUp 0.6s ease-out forwards;
+        }
+    </style>
+
+    <!-- Tailwind configuration for custom colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-blue': '#1A365D',
+                        'accent-teal': '#4FD1C5',
+                        'grid-bg': '#EDF2F7'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="font-inter text-gray-800">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100 shadow-sm">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <div
+                        class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-blue to-accent-teal flex items-center justify-center">
+                        <i class="fas fa-leaf text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-primary-blue">EcoPackAI</h1>
+                        <p class="text-xs text-gray-500 hidden md:block">Intelligent Packaging Optimization</p>
+                    </div>
+                </div>
+
+                <!-- Centered Navigation Links -->
+                <div class="hidden md:flex space-x-10">
+                    <a href="/" class="text-gray-700 hover:text-accent-teal font-medium transition-colors">Home</a>
+                    <a href="/categories"
+                        class="text-gray-700 hover:text-accent-teal font-medium transition-colors">Categories</a>
+                    <a href="/dashboard" class="text-gray-700 hover:text-accent-teal font-medium transition-colors">
+                        <i class="fas fa-chart-line mr-1"></i>Dashboard
+                    </a>
+                    <a href="/how-it-works"
+                        class="text-gray-700 hover:text-accent-teal font-medium transition-colors">How It
+                        Works</a>
+                    <a href="/about"
+                        class="text-accent-teal font-semibold border-b-2 border-accent-teal transition-colors">About</a>
+                </div>
+
+                <!-- CTA Button -->
+                <a href="/#analysis" class="teal-btn text-white font-semibold py-3 px-6 rounded-lg inline-block">
+                    Get Started <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="py-16 md:py-20 relative overflow-hidden">
+        <!-- Background accents -->
+        <div
+            class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-accent-teal/10 to-transparent rounded-full -translate-y-48 translate-x-48">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-primary-blue/10 to-transparent rounded-full translate-y-48 -translate-x-48">
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center max-w-4xl mx-auto">
+                <h1 class="text-4xl md:text-5xl font-bold text-primary-blue mb-6">
+                    About <span class="gradient-text">EcoPackAI</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-600 mb-8">
+                    We're on a mission to revolutionize packaging sustainability through artificial intelligence,
+                    helping businesses make eco-friendly choices without compromising on quality or cost.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission & Vision -->
+    <section class="py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <!-- Mission -->
+                <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-8 card-shadow">
+                    <div
+                        class="w-16 h-16 rounded-xl bg-gradient-to-br from-primary-blue to-blue-600 flex items-center justify-center mb-6">
+                        <i class="fas fa-bullseye text-white text-2xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-primary-blue mb-4">Our Mission</h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        To empower businesses of all sizes with AI-driven insights that make sustainable packaging
+                        accessible, affordable, and actionable. We believe that environmental responsibility and
+                        business success go hand in hand.
+                    </p>
+                </div>
+
+                <!-- Vision -->
+                <div class="bg-gradient-to-br from-teal-50 to-white rounded-2xl p-8 card-shadow">
+                    <div
+                        class="w-16 h-16 rounded-xl bg-gradient-to-br from-accent-teal to-teal-600 flex items-center justify-center mb-6">
+                        <i class="fas fa-eye text-white text-2xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-primary-blue mb-4">Our Vision</h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        A world where every product is packaged sustainably by default. We envision a future where
+                        AI-powered decision-making eliminates wasteful packaging and accelerates the global transition
+                        to a circular economy.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Features -->
+    <section id="features" class="py-12 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-primary-blue mb-4">
+                    Key <span class="gradient-text">Features</span>
+                </h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Powerful tools designed to transform your packaging decisions
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="feature-card bg-white rounded-2xl p-8 card-shadow">
+                    <div
+                        class="w-14 h-14 rounded-lg bg-gradient-to-br from-purple-400 to-purple-500 flex items-center justify-center mb-4">
+                        <i class="fas fa-brain text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary-blue mb-3">AI-Powered Recommendations</h3>
+                    <p class="text-gray-600">
+                        Advanced machine learning algorithms analyze your needs and suggest the most sustainable
+                        materials.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="feature-card bg-white rounded-2xl p-8 card-shadow">
+                    <div
+                        class="w-14 h-14 rounded-lg bg-gradient-to-br from-blue-400 to-blue-500 flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary-blue mb-3">Real-time Analytics</h3>
+                    <p class="text-gray-600">
+                        Access live dashboards with sustainability metrics, cost analysis, and environmental impact
+                        data.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="feature-card bg-white rounded-2xl p-8 card-shadow">
+                    <div
+                        class="w-14 h-14 rounded-lg bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center mb-4">
+                        <i class="fas fa-dollar-sign text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary-blue mb-3">Cost Optimization</h3>
+                    <p class="text-gray-600">
+                        Find eco-friendly materials that fit your budget with detailed cost comparisons and savings
+                        projections.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="feature-card bg-white rounded-2xl p-8 card-shadow">
+                    <div
+                        class="w-14 h-14 rounded-lg bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center mb-4">
+                        <i class="fas fa-leaf text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary-blue mb-3">Environmental Impact Tracking</h3>
+                    <p class="text-gray-600">
+                        Monitor CO₂ savings, biodegradability scores, and recyclability percentages for informed
+                        decisions.
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="feature-card bg-white rounded-2xl p-8 card-shadow">
+                    <div
+                        class="w-14 h-14 rounded-lg bg-gradient-to-br from-teal-400 to-teal-500 flex items-center justify-center mb-4">
+                        <i class="fas fa-file-pdf text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary-blue mb-3">Comprehensive Reports</h3>
+                    <p class="text-gray-600">
+                        Generate detailed PDF reports with interactive charts and insights for stakeholder
+                        presentations.
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="feature-card bg-white rounded-2xl p-8 card-shadow">
+                    <div
+                        class="w-14 h-14 rounded-lg bg-gradient-to-br from-pink-400 to-pink-500 flex items-center justify-center mb-4">
+                        <i class="fas fa-database text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-primary-blue mb-3">Data-Driven Insights</h3>
+                    <p class="text-gray-600">
+                        Leverage our extensive database of sustainable materials with verified specifications and
+                        ratings.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="bg-gradient-to-r from-primary-blue to-accent-teal rounded-3xl p-12 text-white">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Our Impact</h2>
+                    <p class="text-lg text-blue-100">Making a difference, one package at a time</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div class="text-center">
+                        <div class="stat-number text-4xl md:text-5xl font-bold mb-2">13+</div>
+                        <div class="text-blue-100">Material Types</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="stat-number text-4xl md:text-5xl font-bold mb-2">100%</div>
+                        <div class="text-blue-100">Eco-Friendly Focus</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="stat-number text-4xl md:text-5xl font-bold mb-2">24/7</div>
+                        <div class="text-blue-100">AI Availability</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="stat-number text-4xl md:text-5xl font-bold mb-2">Instant</div>
+                        <div class="text-blue-100">Recommendations</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-primary-blue mb-4">
+                    Why Choose <span class="gradient-text">EcoPackAI</span>
+                </h2>
+            </div>
+
+            <div class="max-w-4xl mx-auto space-y-6">
+                <div class="bg-white rounded-xl p-6 card-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-check text-green-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-primary-blue mb-2">Science-Backed Recommendations</h3>
+                        <p class="text-gray-600">Every suggestion is based on verified data, peer-reviewed research, and
+                            real-world performance metrics.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-check text-blue-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-primary-blue mb-2">Easy to Use</h3>
+                        <p class="text-gray-600">No technical expertise required. Our intuitive interface guides you
+                            through the process in minutes.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-check text-purple-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-primary-blue mb-2">Continuous Improvement</h3>
+                        <p class="text-gray-600">Our AI learns and improves with every analysis, ensuring increasingly
+                            accurate recommendations over time.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-teal-100 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-check text-teal-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-primary-blue mb-2">Transparent Methodology</h3>
+                        <p class="text-gray-600">We show you exactly how we calculate sustainability scores and cost
+                            comparisons—no black boxes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gradient-to-r from-primary-blue to-accent-teal">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                Join the Sustainable Packaging Revolution
+            </h2>
+            <p class="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
+                Start making smarter, greener packaging decisions today with EcoPackAI.
+            </p>
+            <a href="/#analysis"
+                class="bg-white text-primary-blue font-semibold py-4 px-8 rounded-lg inline-block hover:shadow-xl transition-all">
+                Get Started Free <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 border-t border-gray-200 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-600">&copy; 2026 EcoPackAI. Made with &hearts; by αикιт 007...</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

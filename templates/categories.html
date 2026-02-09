@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Categories | EcoPackAI</title> <!-- User change preserved -->
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom styles for the geometric grid background */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            background-image:
+                linear-gradient(to right, #EDF2F7 1px, transparent 1px),
+                linear-gradient(to bottom, #EDF2F7 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Custom gradient for emphasized text */
+        .gradient-text {
+            background: linear-gradient(135deg, #1A365D 0%, #4FD1C5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom shadow for cards */
+        /* .card-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            Removed card shadow for blending effect
+        } */
+
+        /* Teal button with drop shadow */
+        .teal-btn {
+            background-color: #4FD1C5;
+            box-shadow: 0 4px 12px rgba(79, 209, 197, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .teal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(79, 209, 197, 0.4);
+        }
+
+        /* Category card hover effect */
+        .category-card {
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            /* box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12); */
+            /* Removed card shadow for blending effect */
+        }
+
+        /* Refined Horizontal Slide Animation - Snappy & Professional */
+        @keyframes horizontal-slide {
+
+            0%,
+            20% {
+                transform: translateX(0);
+            }
+
+            25%,
+            45% {
+                transform: translateX(-25%);
+            }
+
+            50%,
+            70% {
+                transform: translateX(-50%);
+            }
+
+            75%,
+            95% {
+                transform: translateX(-75%);
+            }
+
+            100% {
+                transform: translateX(-75%);
+            }
+        }
+
+        .animate-horizontal-slide {
+            animation: horizontal-slide 16s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+        }
+
+        /* Pause animation on hover so user can interact */
+        .group:hover .animate-horizontal-slide {
+            animation-play-state: paused;
+        }
+
+        /* 3D Flip Card Styles */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .flip-card-front img {
+            border-radius: 24px;
+            /* Curves the image edges - increased radius */
+        }
+
+        .flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .flip-card-front {
+            background-color: transparent;
+        }
+
+        .flip-card-back {
+            background-color: white;
+            color: #1A365D;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+    </style>
+
+    <!-- Tailwind configuration for custom colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-blue': '#1A365D',
+                        'accent-teal': '#4FD1C5',
+                        'grid-bg': '#EDF2F7'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+
+        function toggleFlip(element) {
+            element.classList.toggle('flipped');
+        }
+    </script>
+</head>
+
+<body class="font-inter text-gray-800">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100 shadow-sm">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <div
+                        class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-blue to-accent-teal flex items-center justify-center">
+                        <i class="fas fa-leaf text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-primary-blue">EcoPackAI</h1>
+                        <p class="text-xs text-gray-500 hidden md:block">Intelligent Packaging Optimization</p>
+                    </div>
+                </div>
+
+                <!-- Centered Navigation Links -->
+                <div class="hidden md:flex space-x-10">
+                    <a href="/" class="text-gray-700 hover:text-accent-teal font-medium transition-colors">Home</a>
+                    <a href="/categories"
+                        class="text-accent-teal font-semibold border-b-2 border-accent-teal transition-colors">Categories</a>
+                    <a href="/dashboard" class="text-gray-700 hover:text-accent-teal font-medium transition-colors">
+                        <i class="fas fa-chart-line mr-1"></i>Dashboard
+                    </a>
+                    <a href="/how-it-works"
+                        class="text-gray-700 hover:text-accent-teal font-medium transition-colors">How It
+                        Works</a>
+                    <a href="/about"
+                        class="text-gray-700 hover:text-accent-teal font-medium transition-colors">About</a>
+                </div>
+
+                <!-- CTA Button -->
+                <a href="/#analysis" class="teal-btn text-white font-semibold py-3 px-6 rounded-lg inline-block">
+                    Get Started <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="py-16 md:py-20 relative overflow-hidden">
+        <!-- Background accent -->
+        <div
+            class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-accent-teal/10 to-transparent rounded-full -translate-y-48 translate-x-48">
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center max-w-4xl mx-auto">
+                <h1 class="text-4xl md:text-5xl font-bold text-primary-blue mb-6">
+                    Product <span class="gradient-text">Categories</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-600 mb-8">
+                    Comprehensive sustainable packaging solutions for every industry.
+                    Find the perfect eco-friendly match for your products.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Grid -->
+    <section class="py-12 pb-20">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 gap-y-12">
+                <!-- Added gap-y-12 for spacing -->
+
+                <!-- 1. Food & Beverages -->
+                <div class="group flex flex-col items-center transition-transform duration-300 hover:-translate-y-2">
+                    <div
+                        class="mb-4 bg-white/90 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-gray-200 z-10">
+                        <span class="font-bold text-primary-blue tracking-wide">Food & Beverages</span>
+                    </div>
+                    <div class="h-80 w-full rounded-2xl overflow-hidden relative">
+                        <div class="absolute inset-0 h-full w-[400%] flex flex-row animate-horizontal-slide"
+                            style="animation-duration: 25s; animation-delay: -2s;">
+                            <!-- Image 1 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/food_beverages.png') }}"
+                                            alt="Food & Beverages 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Recycled PET</li>
+                                            <li>Glass</li>
+                                            <li>Aluminum</li>
+                                            <li>Compostable Paper</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 2 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/food_beverages2.png') }}"
+                                            alt="Food & Beverages 2" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Bioplastics</li>
+                                            <li>Edible Packaging</li>
+                                            <li>Recycled Bottles</li>
+                                            <li>Bagcane</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 3 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/food_beverages3.png') }}"
+                                            alt="Food & Beverages 3" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Mushroom Mycelium</li>
+                                            <li>Seaweed Extracts</li>
+                                            <li>Paper Pulp</li>
+                                            <li>Plant Fibers</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Duplicate Image 1 for seamless loop -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/food_beverages.png') }}"
+                                            alt="Food & Beverages 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Recycled PET</li>
+                                            <li>Glass</li>
+                                            <li>Aluminum</li>
+                                            <li>Compostable Paper</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Electronics -->
+                <div class="group flex flex-col items-center transition-transform duration-300 hover:-translate-y-2">
+                    <div
+                        class="mb-4 bg-white/90 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-gray-200 z-10">
+                        <span class="font-bold text-primary-blue tracking-wide">Electronics</span>
+                    </div>
+                    <div class="h-80 w-full rounded-2xl overflow-hidden relative">
+                        <div class="absolute inset-0 h-full w-[400%] flex flex-row animate-horizontal-slide"
+                            style="animation-duration: 28s; animation-delay: -15s;">
+                            <!-- Image 1 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/electronics_1.jpg') }}"
+                                            alt="Electronics 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Molded Pulp</li>
+                                            <li>Corrugated Cardboard</li>
+                                            <li>Bio-foam</li>
+                                            <li>Recycled Plastics</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 2 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/electronics_2.jpg') }}"
+                                            alt="Electronics 2" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Mushroom Foam</li>
+                                            <li>Paper Honeycomb</li>
+                                            <li>Cornstarch Peanuts</li>
+                                            <li>Recycled Bubble Wrap</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 3 (Reusing 1 for loop) -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/electronics_1.jpg') }}"
+                                            alt="Electronics 3" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Molded Pulp</li>
+                                            <li>Corrugated Cardboard</li>
+                                            <li>Bio-foam</li>
+                                            <li>Recycled Plastics</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Duplicate Image 1 for seamless loop -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/electronics_1.jpg') }}"
+                                            alt="Electronics 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Molded Pulp</li>
+                                            <li>Corrugated Cardboard</li>
+                                            <li>Bio-foam</li>
+                                            <li>Recycled Plastics</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Industrial Goods -->
+                <div class="group flex flex-col items-center transition-transform duration-300 hover:-translate-y-2">
+                    <div
+                        class="mb-4 bg-white/90 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-gray-200 z-10">
+                        <span class="font-bold text-primary-blue tracking-wide">Industrial Goods</span>
+                    </div>
+                    <div class="h-80 w-full rounded-2xl overflow-hidden relative">
+                        <div class="absolute inset-0 h-full w-[400%] flex flex-row animate-horizontal-slide"
+                            style="animation-duration: 32s; animation-delay: -8s;">
+                            <!-- Image 1 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/industrial_goods_1.jpg') }}"
+                                            alt="Industrial Goods 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Reusable Pallets</li>
+                                            <li>Steel Drums</li>
+                                            <li>Bulk Bags</li>
+                                            <li>Recycled Wraps</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 2 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/industrial_goods_2.jpg') }}"
+                                            alt="Industrial Goods 2" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Corrugated Board</li>
+                                            <li>Heavy Duty Paper</li>
+                                            <li>Paper Strepping</li>
+                                            <li>Bio-Styrofoam</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 3 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/industrial_goods_3.jpg') }}"
+                                            alt="Industrial Goods 3" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Wood Crates</li>
+                                            <li>Returnable Bins</li>
+                                            <li>Fiber Drums</li>
+                                            <li>Stretch Wrap</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Duplicate Image 1 for seamless loop -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/industrial_goods_1.jpg') }}"
+                                            alt="Industrial Goods 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Reusable Pallets</li>
+                                            <li>Steel Drums</li>
+                                            <li>Bulk Bags</li>
+                                            <li>Recycled Wraps</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Home & Living -->
+                <div class="group flex flex-col items-center transition-transform duration-300 hover:-translate-y-2">
+                    <div
+                        class="mb-4 bg-white/90 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-gray-200 z-10">
+                        <span class="font-bold text-primary-blue tracking-wide">Home & Living</span>
+                    </div>
+                    <div class="h-80 w-full rounded-2xl overflow-hidden relative">
+                        <div class="absolute inset-0 h-full w-[400%] flex flex-row animate-horizontal-slide"
+                            style="animation-duration: 22s; animation-delay: -5s;">
+                            <!-- Image 1 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/home_living_1.jpg') }}"
+                                            alt="Home & Living 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Recycled Cardboard</li>
+                                            <li>Kraft Paper</li>
+                                            <li>Mushroom Packaging</li>
+                                            <li>Cornstarch Foam</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 2 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/home_living_2.jpg') }}"
+                                            alt="Home & Living 2" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Pulp Boxes</li>
+                                            <li>Paper Cushions</li>
+                                            <li>Wooden Crates</li>
+                                            <li>Compostable Wrap</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 3 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/home_living_3.jpg') }}"
+                                            alt="Home & Living 3" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Corrugated Board</li>
+                                            <li>Molded Fiber</li>
+                                            <li>Honeycomb Board</li>
+                                            <li>Paper Tape</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Duplicate Image 1 for seamless loop -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/home_living_1.jpg') }}"
+                                            alt="Home & Living 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Recycled Cardboard</li>
+                                            <li>Kraft Paper</li>
+                                            <li>Mushroom Packaging</li>
+                                            <li>Cornstarch Foam</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Apparel & Fashion -->
+                <div class="group flex flex-col items-center transition-transform duration-300 hover:-translate-y-2">
+                    <div
+                        class="mb-4 bg-white/90 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-gray-200 z-10">
+                        <span class="font-bold text-primary-blue tracking-wide">Apparel & Fashion</span>
+                    </div>
+                    <div class="h-80 w-full rounded-2xl overflow-hidden relative">
+                        <div class="absolute inset-0 h-full w-[400%] flex flex-row animate-horizontal-slide"
+                            style="animation-duration: 20s; animation-delay: -3s;">
+                            <!-- Image 1 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/apparel_fashion_1.png') }}"
+                                            alt="Apparel & Fashion 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Recycled Poly Mailers</li>
+                                            <li>Kraft Boxes</li>
+                                            <li>Tissue Paper</li>
+                                            <li>Compostable Bags</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 2 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/apparel_fashion_2.png') }}"
+                                            alt="Apparel & Fashion 2" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Recycled Paper</li>
+                                            <li>Plant-based Plastics</li>
+                                            <li>Organic Cotton Bags</li>
+                                            <li>Soy-based Ink</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 3 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/apparel_fashion_3.png') }}"
+                                            alt="Apparel & Fashion 3" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Cardboard Envelopes</li>
+                                            <li>Paper Hang Tags</li>
+                                            <li>Jute Strings</li>
+                                            <li>Biodegradable Wraps</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Duplicate Image 1 for seamless loop -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/apparel_fashion_1.png') }}"
+                                            alt="Apparel & Fashion 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Recycled Poly Mailers</li>
+                                            <li>Kraft Boxes</li>
+                                            <li>Tissue Paper</li>
+                                            <li>Compostable Bags</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Cosmetics & Beauty -->
+                <div class="group flex flex-col items-center transition-transform duration-300 hover:-translate-y-2">
+                    <div
+                        class="mb-4 bg-white/90 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-gray-200 z-10">
+                        <span class="font-bold text-primary-blue tracking-wide">Cosmetics & Beauty</span>
+                    </div>
+                    <div class="h-80 w-full rounded-2xl overflow-hidden relative">
+                        <div class="absolute inset-0 h-full w-[400%] flex flex-row animate-horizontal-slide"
+                            style="animation-duration: 24s; animation-delay: -12s;">
+                            <!-- Image 1 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/cosmetics_beauty_1.png') }}"
+                                            alt="Cosmetics & Beauty 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Glass Jars</li>
+                                            <li>Bamboo</li>
+                                            <li>PCR Plastic</li>
+                                            <li>Aluminum</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 2 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/cosmetics_beauty_2.png') }}"
+                                            alt="Cosmetics & Beauty 2" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Refillable Compacts</li>
+                                            <li>Paper Tubes</li>
+                                            <li>Cork Stoppers</li>
+                                            <li>Recycled Glass</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 3 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/cosmetics_beauty_3.png') }}"
+                                            alt="Cosmetics & Beauty 3" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Metal Tins</li>
+                                            <li>Wood Lids</li>
+                                            <li>Sugarcane Tubes</li>
+                                            <li>Paper Palettes</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Duplicate Image 1 for seamless loop -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/cosmetics_beauty_1.png') }}"
+                                            alt="Cosmetics & Beauty 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Glass Jars</li>
+                                            <li>Bamboo</li>
+                                            <li>PCR Plastic</li>
+                                            <li>Aluminum</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Automotive Parts (Swapped) -->
+                <div class="group flex flex-col items-center transition-transform duration-300 hover:-translate-y-2">
+                    <div
+                        class="mb-4 bg-white/90 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-gray-200 z-10">
+                        <span class="font-bold text-primary-blue tracking-wide">Automotive Parts</span>
+                    </div>
+                    <div class="h-80 w-full rounded-2xl overflow-hidden relative">
+                        <div class="absolute inset-0 h-full w-[400%] flex flex-row animate-horizontal-slide"
+                            style="animation-duration: 28s; animation-delay: -11s;">
+                            <!-- Image 1 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/automotive_parts_1.png') }}"
+                                            alt="Automotive Parts 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Corrugated Board</li>
+                                            <li>Returnable Crates</li>
+                                            <li>Molded Pulp</li>
+                                            <li>VCI Paper</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 2 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/automotive_parts_2.png') }}"
+                                            alt="Automotive Parts 2" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Biodegradable Films</li>
+                                            <li>Wooden Crates</li>
+                                            <li>Paper Dunnage</li>
+                                            <li>Textile Wraps</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 3 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/automotive_parts_3.png') }}"
+                                            alt="Automotive Parts 3" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Recycled Plastic</li>
+                                            <li>Metal Bins</li>
+                                            <li>Honeycomb Board</li>
+                                            <li>Compostable foam</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Duplicate Image 1 for seamless loop -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/automotive_parts_1.png') }}"
+                                            alt="Automotive Parts 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Corrugated Board</li>
+                                            <li>Returnable Crates</li>
+                                            <li>Molded Pulp</li>
+                                            <li>VCI Paper</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. Toys -->
+                <div class="group flex flex-col items-center transition-transform duration-300 hover:-translate-y-2">
+                    <div
+                        class="mb-4 bg-white/90 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-gray-200 z-10">
+                        <span class="font-bold text-primary-blue tracking-wide">Toys</span>
+                    </div>
+                    <div class="h-80 w-full rounded-2xl overflow-hidden relative">
+                        <div class="absolute inset-0 h-full w-[400%] flex flex-row animate-horizontal-slide"
+                            style="animation-duration: 18s; animation-delay: -4s;">
+                            <!-- Image 1 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/toys_1.png') }}" alt="Toys 1"
+                                            class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Recycled Cardboard</li>
+                                            <li>Molded Pulp</li>
+                                            <li>Wood</li>
+                                            <li>Bio-plastics</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 2 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/toys_2.png') }}" alt="Toys 2"
+                                            class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Organic Cotton</li>
+                                            <li>Paper Twist Ties</li>
+                                            <li>Soy Ink</li>
+                                            <li>Water-based Varnish</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 3 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/toys_3.png') }}" alt="Toys 3"
+                                            class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Kraft Boxes</li>
+                                            <li>Jute Ropes</li>
+                                            <li>Cork</li>
+                                            <li>Plant Fibers</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Duplicate Image 1 for seamless loop -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/toys_1.png') }}" alt="Toys 1"
+                                            class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Recycled Cardboard</li>
+                                            <li>Molded Pulp</li>
+                                            <li>Wood</li>
+                                            <li>Bio-plastics</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. E-commerce -->
+                <div class="group flex flex-col items-center transition-transform duration-300 hover:-translate-y-2">
+                    <div
+                        class="mb-4 bg-white/90 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-gray-200 z-10">
+                        <span class="font-bold text-primary-blue tracking-wide">E-commerce</span>
+                    </div>
+                    <div class="h-80 w-full rounded-2xl overflow-hidden relative">
+                        <div class="absolute inset-0 h-full w-[400%] flex flex-row animate-horizontal-slide"
+                            style="animation-duration: 26s; animation-delay: -9s;">
+                            <!-- Image 1 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/industrial_goods_1.jpg') }}"
+                                            alt="E-commerce 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Corrugated Boxes</li>
+                                            <li>Paper Tape</li>
+                                            <li>Kraft Mailers</li>
+                                            <li>Honeycomb Paper</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 2 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/industrial_goods_2.jpg') }}"
+                                            alt="E-commerce 2" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Padded Mailers</li>
+                                            <li>Tissue Paper</li>
+                                            <li>Recycled Fill</li>
+                                            <li>Starch Peanuts</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 3 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/industrial_goods_3.jpg') }}"
+                                            alt="E-commerce 3" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Cardboard Corners</li>
+                                            <li>Paper Straps</li>
+                                            <li>Water-activated Tape</li>
+                                            <li>Molded Pulp</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Duplicate Image 1 for seamless loop -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/industrial_goods_1.jpg') }}"
+                                            alt="E-commerce 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Corrugated Boxes</li>
+                                            <li>Paper Tape</li>
+                                            <li>Kraft Mailers</li>
+                                            <li>Honeycomb Paper</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10. Agriculture -->
+                <div class="group flex flex-col items-center transition-transform duration-300 hover:-translate-y-2">
+                    <div
+                        class="mb-4 bg-white/90 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-gray-200 z-10">
+                        <span class="font-bold text-primary-blue tracking-wide">Agriculture</span>
+                    </div>
+                    <div class="h-80 w-full rounded-2xl overflow-hidden relative">
+                        <div class="absolute inset-0 h-full w-[400%] flex flex-row animate-horizontal-slide"
+                            style="animation-duration: 23s; animation-delay: -4s;">
+                            <!-- Image 1 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/agriculture_1.png') }}"
+                                            alt="Agriculture 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Jute Bags</li>
+                                            <li>Wooden Crates</li>
+                                            <li>Bio-twine</li>
+                                            <li>Hemp Sacks</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 2 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/agriculture_2.png') }}"
+                                            alt="Agriculture 2" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>PLA Mulch Films</li>
+                                            <li>Coconut Coir</li>
+                                            <li>Paper Pots</li>
+                                            <li>Cardboard Trays</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 3 (Reuse 1 for loop) -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/agriculture_1.png') }}"
+                                            alt="Agriculture 3" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Bamboo Baskets</li>
+                                            <li>Cotton Bags</li>
+                                            <li>Net Bags</li>
+                                            <li>Rice Husks</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Duplicate Image 1 for seamless loop -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/agriculture_1.png') }}"
+                                            alt="Agriculture 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Jute Bags</li>
+                                            <li>Wooden Crates</li>
+                                            <li>Bio-twine</li>
+                                            <li>Hemp Sacks</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 11. Pharmaceuticals (Swapped) -->
+                <div class="group flex flex-col items-center transition-transform duration-300 hover:-translate-y-2">
+                    <div
+                        class="mb-4 bg-white/90 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-gray-200 z-10">
+                        <span class="font-bold text-primary-blue tracking-wide">Pharmaceuticals</span>
+                    </div>
+                    <div class="h-80 w-full rounded-2xl overflow-hidden relative">
+                        <div class="absolute inset-0 h-full w-[400%] flex flex-row animate-horizontal-slide"
+                            style="animation-duration: 30s; animation-delay: -7s;">
+                            <!-- Image 1 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/pharmaceuticals_1.png') }}"
+                                            alt="Pharmaceuticals 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Blister Packs (PLA)</li>
+                                            <li>Glass Vials</li>
+                                            <li>Cardboard Cartons</li>
+                                            <li>Aluminum Foil</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 2 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/pharmaceuticals_2.png') }}"
+                                            alt="Pharmaceuticals 2" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Bio-plastics</li>
+                                            <li>Paper Leaflets</li>
+                                            <li>Ampoules</li>
+                                            <li>Sterile Wraps</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 3 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/pharmaceuticals_3.png') }}"
+                                            alt="Pharmaceuticals 3" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Biodegradable Films</li>
+                                            <li>Paper Seals</li>
+                                            <li>Recycled Bottles</li>
+                                            <li>Eco-labels</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Duplicate Image 1 for seamless loop -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/pharmaceuticals_1.png') }}"
+                                            alt="Pharmaceuticals 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Blister Packs (PLA)</li>
+                                            <li>Glass Vials</li>
+                                            <li>Cardboard Cartons</li>
+                                            <li>Aluminum Foil</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 12. Personal Care -->
+                <div class="group flex flex-col items-center transition-transform duration-300 hover:-translate-y-2">
+                    <div
+                        class="mb-4 bg-white/90 backdrop-blur-md px-6 py-2 rounded-full shadow-sm border border-gray-200 z-10">
+                        <span class="font-bold text-primary-blue tracking-wide">Personal Care</span>
+                    </div>
+                    <div class="h-80 w-full rounded-2xl overflow-hidden relative">
+                        <div class="absolute inset-0 h-full w-[400%] flex flex-row animate-horizontal-slide"
+                            style="animation-duration: 24s; animation-delay: -6s;">
+                            <!-- Image 1 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/personal_care_1.png') }}"
+                                            alt="Personal Care 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Refill Pouches</li>
+                                            <li>Aluminum Bottles</li>
+                                            <li>PCR Plastic</li>
+                                            <li>Paper Tubes</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 2 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/personal_care_2.png') }}"
+                                            alt="Personal Care 2" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Bamboo Toothbrushes</li>
+                                            <li>Cardboard Boxes</li>
+                                            <li>Glass Droppers</li>
+                                            <li>Cornstarch Wrap</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Image 3 -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/personal_care_3.png') }}"
+                                            alt="Personal Care 3" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Recycled Jars</li>
+                                            <li>Metal Caps</li>
+                                            <li>Cork Seals</li>
+                                            <li>Plant Sponges</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Duplicate Image 1 for seamless loop -->
+                            <div class="h-full w-1/4 flex items-center justify-center perspective-1000"
+                                onclick="toggleFlip(this)">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front">
+                                        <img src="{{ url_for('static', filename='images/personal_care_1.png') }}"
+                                            alt="Personal Care 1" class="w-full h-full object-contain">
+                                    </div>
+                                    <div class="flip-card-back">
+                                        <h4 class="font-bold text-sm mb-2 text-accent-teal">Sustainable Materials</h4>
+                                        <ul class="text-xs text-left list-disc list-inside space-y-1">
+                                            <li>Refill Pouches</li>
+                                            <li>Aluminum Bottles</li>
+                                            <li>PCR Plastic</li>
+                                            <li>Paper Tubes</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section (Consistent Theme) -->
+    <section class="py-20 bg-primary-blue relative overflow-hidden">
+        <!-- Abstract shapes matching index theme -->
+        <div
+            class="absolute top-0 right-0 w-96 h-96 bg-white opacity-5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-64 h-64 bg-accent-teal opacity-10 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2">
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Optimize Your Packaging?</h2>
+            <p class="text-blue-100 text-lg mb-10 max-w-2xl mx-auto">
+                Join thousands of businesses optimizing their packaging with EcoPackAI.
+            </p>
+            <a href="/#analysis"
+                class="inline-block bg-accent-teal text-white font-bold py-4 px-10 rounded-lg shadow-lg hover:bg-teal-400 transition-all transform hover:-translate-y-1">
+                Start Analysis Now <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 border-t border-gray-200 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-600">&copy; 2026 EcoPackAI. Made with &hearts; by αикιт 007...</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
