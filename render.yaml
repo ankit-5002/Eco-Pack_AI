@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: ecopackai
+    env: docker
+    plan: free
+    branch: main  # Adjust if your branch is 'master'
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: PYTHON_VERSION
+        value: 3.11.0
