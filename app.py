@@ -7,8 +7,8 @@ import io
 import json
 import datetime
 import logging
-import psycopg2
-from psycopg2.extras import RealDictCursor
+# import psycopg2
+# from psycopg2.extras import RealDictCursor
 import threading
 from dotenv import load_dotenv
 
@@ -56,7 +56,7 @@ app = Flask(__name__)
 # ==========================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, 'models')
-DATABASE_URL = os.getenv('DATABASE_URL')
+# DATABASE_URL = os.getenv('DATABASE_URL')
 PORT = int(os.getenv('PORT', 8080))
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 
@@ -101,14 +101,14 @@ def get_le_cat():
 _materials_cache = None
 _materials_lock = threading.Lock()
 
-def get_db_connection():
-    """Get PostgreSQL database connection with timeout"""
-    if DATABASE_URL:
-        # Set a short connection timeout (e.g. 2 seconds) to fail fast if DB is unreachable
-        return psycopg2.connect(DATABASE_URL, connect_timeout=2)
-    else:
-        # Fallback to CSV if no database configured (for local development)
-        return None
+# def get_db_connection():
+#     """Get PostgreSQL database connection with timeout"""
+#     if DATABASE_URL:
+#         # Set a short connection timeout (e.g. 2 seconds) to fail fast if DB is unreachable
+#         return psycopg2.connect(DATABASE_URL, connect_timeout=2)
+#     else:
+#         # Fallback to CSV if no database configured (for local development)
+#         return None
 
 def get_materials():
     """Get materials from database or CSV fallback, using cache with thread safety"""
@@ -124,40 +124,46 @@ def get_materials():
             return _materials_cache
 
         try:
-            conn = get_db_connection()
-            if conn:
-                query = """
-                SELECT 
-                    "Material_Type",
-                    "Cost_per_unit",
-                    "CO2_Emission_Score",
-                    "Biodegradability_Score",
-                    "Recyclability_Percent",
-                    "Tensile_Strength_MPa",
-                    "Weight_Capacity_kg",
-                    "Suitability_Tags"
-                FROM materials
-                """
-                materials_df = pd.read_sql_query(query, conn)
-                conn.close()
-                
-                # Convert numeric columns to proper types
-                numeric_columns = [
-                    'Cost_per_unit', 'CO2_Emission_Score', 'Biodegradability_Score',
-                    'Recyclability_Percent', 'Tensile_Strength_MPa', 'Weight_Capacity_kg'
-                ]
-                for col in numeric_columns:
-                    materials_df[col] = pd.to_numeric(materials_df[col], errors='coerce')
-                
-                # Update cache
-                _materials_cache = materials_df
-                return materials_df
-            else:
-                # Fallback to CSV
-                _materials_cache = pd.read_csv(os.path.join(BASE_DIR, 'materials13.csv'))
-                return _materials_cache
+            # DIRECT CSV USAGE as requested
+            # conn = get_db_connection()
+            # if conn:
+            #     query = """
+            #     SELECT 
+            #         "Material_Type",
+            #         "Cost_per_unit",
+            #         "CO2_Emission_Score",
+            #         "Biodegradability_Score",
+            #         "Recyclability_Percent",
+            #         "Tensile_Strength_MPa",
+            #         "Weight_Capacity_kg",
+            #         "Suitability_Tags"
+            #     FROM materials
+            #     """
+            #     materials_df = pd.read_sql_query(query, conn)
+            #     conn.close()
+            #     
+            #     # Convert numeric columns to proper types
+            #     numeric_columns = [
+            #         'Cost_per_unit', 'CO2_Emission_Score', 'Biodegradability_Score',
+            #         'Recyclability_Percent', 'Tensile_Strength_MPa', 'Weight_Capacity_kg'
+            #     ]
+            #     for col in numeric_columns:
+            #         materials_df[col] = pd.to_numeric(materials_df[col], errors='coerce')
+            #     
+            #     # Update cache
+            #     _materials_cache = materials_df
+            #     return materials_df
+            # else:
+            #     # Fallback to CSV
+            #     _materials_cache = pd.read_csv(os.path.join(BASE_DIR, 'materials13.csv'))
+            #     return _materials_cache
+            
+            # Load directly from CSV
+            _materials_cache = pd.read_csv(os.path.join(BASE_DIR, 'materials13.csv'))
+            return _materials_cache
+
         except Exception as e:
-            logging.error(f"Database error: {e}. Falling back to CSV.")
+            logging.error(f"Error loading data: {e}. Falling back to CSV.")
             # Fallback to CSV on error
             _materials_cache = pd.read_csv(os.path.join(BASE_DIR, 'materials13.csv'))
             return _materials_cache
