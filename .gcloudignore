@@ -1,6 +1,7 @@
 .gcloudignore
 .git
 .gitignore
+.gitattributes
 __pycache__/
 *.pyc
 *.pyo
@@ -12,4 +13,10 @@ __pycache__/
 README.md
 .DS_Store
 *.log
+app.log
+app_output.log
+startup_check.log
 products1.csv
+render.yaml
+docker-compose.yml
+.dockerignore
